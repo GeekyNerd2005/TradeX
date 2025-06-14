@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "lightweight-charts": "^4.2.3",
+    "recharts": "^2.15.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.5",
+    "tailwindcss": "^4.1.10"
+  }
+}

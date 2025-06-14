@@ -1,0 +1,17 @@
+# Node modules
+frontend/node_modules/
+frontend/.env
+
+# Python
+python-api/__pycache__/
+python-api/env/
+python-api/.env
+
+# .NET
+backend/bin/
+backend/obj/
+
+# General
+*.log
+.env
+.DS_Store
