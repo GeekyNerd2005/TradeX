@@ -1,17 +1,21 @@
-# Node modules
-frontend/node_modules/
-frontend/.env
+# Node.js frontend
+node_modules/
+dist/
+build/
 
-# Python
-python-api/__pycache__/
-python-api/env/
-python-api/.env
+# .NET backend
+bin/
+obj/
+*.user
+*.vs
+*.suo
 
-# .NET
-backend/bin/
-backend/obj/
+# Python backend
+__pycache__/
+*.pyc
+venv/
 
-# General
-*.log
+# Common
 .env
 .DS_Store
+*.log
