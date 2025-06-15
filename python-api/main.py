@@ -4,37 +4,42 @@ import time
 
 app = Flask(__name__)
 
+import time
+
 @app.route("/candles/<ticker>")
 def get_candles(ticker):
     range_ = request.args.get("range", "3mo")
     interval = request.args.get("interval", "1d")
 
     try:
-        ticker_data = yf.Ticker(ticker)
-        df = ticker_data.history(period=range_, interval=interval)
+        df = yf.Ticker(ticker).history(period=range_, interval=interval)
 
-        currency = ticker_data.info.get("currency", "USD")
         if df.empty:
-            return jsonify([])
+            return jsonify({"candles": [], "currency": "INR"})
 
-        candles = []
-        for ts, row in df.iterrows():
-            candles.append({
-                "time": int(ts.timestamp()),  # Convert to UNIX time
-                "open": round(row["Open"], 2),
-                "high": round(row["High"], 2),
-                "low": round(row["Low"], 2),
-                "close": round(row["Close"], 2),
-                "volume": int(row["Volume"])
-            })
+        # Add a 'time' column in UNIX seconds
+        df["time"] = df.index.map(lambda x: int(time.mktime(x.timetuple())))
 
-        return jsonify({
-            "currency": currency,
-            "candles": candles
+        # Rename the columns to lowercase just in case
+        df = df.rename(columns={
+            "Open": "open",
+            "High": "high",
+            "Low": "low",
+            "Close": "close",
+            "Volume": "volume"
         })
 
+        df = df.reset_index(drop=True)
+
+        candles = df[["time", "open", "high", "low", "close", "volume"]].to_dict(orient="records")
+
+        return jsonify({
+            "currency": "INR",
+            "candles": candles
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(port=8000)
